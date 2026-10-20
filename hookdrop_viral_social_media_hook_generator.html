@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HookDrop - Viral Social Media Hook Generator</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .category-pill.active {
+      background-color: #8b5cf6;
+      color: #ffffff;
+      border-color: #a78bfa;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-lg mx-auto">
+    <!-- Top Bar with Monetization & Favorites Controls -->
+    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/80">
+      <div class="flex items-center gap-1.5">
+        <span class="text-xl font-extrabold tracking-tight text-white">
+          Hook<span class="text-violet-400">Drop</span>
+        </span>
+        <span id="pro-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider">
+          PRO UNLOCKED
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="open-favorites-btn" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-medium text-slate-300 transition-colors flex items-center gap-1.5">
+          <span>⭐</span>
+          <span>Saved</span>
+          <span id="fav-count-badge" class="px-1.5 py-0.2 rounded-full bg-violet-600 text-[10px] font-bold text-white">0</span>
+        </button>
+
+        <button id="open-pro-btn" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-xs font-bold text-slate-950 shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5">
+          <span>⚡</span>
+          <span id="pro-btn-text">Unlock Pro ($9)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Header Description -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold uppercase tracking-wider mb-2">
+        ⚡ 1-Click Viral Hook Generator
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-1">
+        Stop Staring at a Blank Screen
+      </h1>
+      <p class="text-slate-400 text-xs md:text-sm">
+        Brainless scroll-stopping hooks tailored to your exact niche.
+      </p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <!-- Glow Accent -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <!-- Controls: Category Pills -->
+      <div class="mb-4">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+          Select Niche / Vibe
+        </label>
+        <div class="flex flex-wrap gap-1.5" id="category-container">
+          <button data-category="all" class="category-pill active px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60 hover:bg-slate-700 transition-colors">
+            All Niches
+          </button>
+          <button data-category="business" class="category-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60 hover:bg-slate-700 transition-colors">
+            💼 Money & Business
+          </button>
+          <button data-category="fitness" class="category-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60 hover:bg-slate-700 transition-colors">
+            💪 Fitness & Health
+          </button>
+          <button data-category="tech" class="category-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60 hover:bg-slate-700 transition-colors">
+            🤖 Tech & AI
+          </button>
+          <button data-category="creator" class="category-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60 hover:bg-slate-700 transition-colors">
+            🎬 Creator Life
+          </button>
+          <button id="pro-vault-pill" data-category="pro" class="category-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-colors flex items-center gap-1">
+            <span>🔒</span>
+            <span>Pro Vault</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls: Custom Keyword Input -->
+      <div class="mb-5">
+        <div class="flex justify-between items-center mb-1.5">
+          <label for="topic-input" class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Custom Topic (Optional)
+          </label>
+          <span class="text-[11px] text-slate-500">Auto-fills template blanks</span>
+        </div>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="topic-input" 
+            placeholder="e.g. real estate, weight loss, coding, coffee..."
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
+          >
+          <button 
+            id="clear-topic-btn" 
+            class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs px-1.5 py-0.5 rounded bg-slate-800"
+            title="Clear custom topic"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Hook Card -->
+      <div class="relative bg-slate-950/80 rounded-xl border border-slate-800/90 p-4 mb-5">
+        <!-- Tag & Counter -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span id="hook-category" class="px-2.5 py-0.5 bg-violet-500/20 text-violet-300 text-xs font-semibold rounded-md">
+              The Secret Method
+            </span>
+            <span id="hook-pro-tag" class="hidden px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">
+              PRO
+            </span>
+          </div>
+          <span id="hook-counter" class="text-slate-500 text-xs font-mono">
+            1 of 20
+          </span>
+        </div>
+
+        <!-- Hook Text -->
+        <div class="min-h-[96px] flex items-center justify-center text-center p-2">
+          <p id="hook-text" class="text-lg font-semibold text-slate-100 leading-snug">
+            "If you want to master [skill] before 2027, stop doing this immediately."
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2.5">
+        <button id="generate-btn" class="w-full py-3 px-4 bg-violet-600 hover:bg-violet-500 active:scale-[0.98] transition-all rounded-xl font-bold text-white shadow-lg shadow-violet-600/25 flex items-center justify-center gap-2">
+          <span>Generate Next Hook</span>
+          <span class="text-lg">⚡</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button id="copy-btn" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700/80 active:scale-[0.98] transition-all rounded-xl text-xs font-medium text-slate-300 flex items-center justify-center gap-1.5 border border-slate-700/50">
+            <span id="copy-text">Copy to Clipboard</span>
+          </button>
+
+          <button id="save-fav-btn" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700/80 active:scale-[0.98] transition-all rounded-xl text-xs font-medium text-slate-300 flex items-center justify-center gap-1.5 border border-slate-700/50">
+            <span id="fav-btn-icon">⭐</span>
+            <span id="fav-btn-text">Save to Favorites</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monetization Banner / Passive Income Demo Callout -->
+    <div id="pro-teaser-banner" class="mt-4 p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 flex items-center justify-between">
+      <div class="text-left">
+        <p class="text-xs font-bold text-amber-300 flex items-center gap-1">
+          <span>💎 Monetization Engine:</span>
+          <span class="text-slate-300 font-normal">Sell pro swipe files for $9</span>
+        </p>
+        <p class="text-[11px] text-slate-400 mt-0.5">
+          Creators unlock 100+ proven viral templates with zero recurring effort.
+        </p>
+      </div>
+      <button id="banner-unlock-btn" class="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors">
+        See Paywall
+      </button>
+    </div>
+
+    <!-- Sub-footer / Stats -->
+    <div class="mt-4 text-center">
+      <p class="text-xs text-slate-500">
+        💰 <span class="text-slate-400 font-medium">Step 3:</span> Passive income paywall modal + local storage favorites.
+      </p>
+    </div>
+  </div>
+
+  <!-- MODAL: Unlock Pro (Monetization & Paywall Simulator) -->
+  <div id="pro-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button id="close-pro-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg p-1">
+        ✕
+      </button>
+
+      <div class="text-center mb-5">
+        <div class="w-12 h-12 bg-amber-500/20 border border-amber-500/30 text-amber-300 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
+          👑
+        </div>
+        <h3 class="text-xl font-bold text-white mb-1">Unlock HookDrop Pro</h3>
+        <p class="text-xs text-slate-400">
+          The ultimate unfair advantage for TikTok, Reels, and Shorts creators.
+        </p>
+      </div>
+
+      <!-- Feature Checklist -->
+      <div class="space-y-2.5 bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 mb-5">
+        <div class="flex items-center gap-2 text-xs text-slate-200">
+          <span class="text-emerald-400 font-bold">✓</span>
+          <span><strong>100+ Battle-Tested Hooks</strong> across all major niches</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-200">
+          <span class="text-emerald-400 font-bold">✓</span>
+          <span><strong>Exclusive Contrarian & Storytelling</strong> high-retention frameworks</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-200">
+          <span class="text-emerald-400 font-bold">✓</span>
+          <span><strong>One-Time Payment</strong> with lifetime updates & zero monthly fees</span>
+        </div>
+      </div>
+
+      <!-- Price Box -->
+      <div class="flex items-baseline justify-between p-3.5 rounded-xl bg-slate-800/50 border border-slate-700/60 mb-5">
+        <div>
+          <span class="text-xs text-slate-400 block">Lifetime Access</span>
+          <span class="text-xs line-through text-slate-500">$29.00</span>
+        </div>
+        <div class="text-right">
+          <span class="text-2xl font-black text-amber-300">$9</span>
+          <span class="text-xs text-slate-400"> one-time</span>
+        </div>
+      </div>
+
+      <!-- Simulator Button -->
+      <div class="space-y-3">
+        <button id="simulate-buy-btn" class="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 rounded-xl font-bold text-slate-950 shadow-lg shadow-amber-500/25 transition-all text-sm flex items-center justify-center gap-2">
+          <span>Simulate Instant Purchase</span>
+          <span>🚀</span>
+        </button>
+
+        <p class="text-[11px] text-center text-slate-500">
+          In production, this button links directly to your <span class="text-slate-400 underline">Gumroad</span>, <span class="text-slate-400 underline">Lemon Squeezy</span>, or <span class="text-slate-400 underline">Stripe</span> checkout link!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Saved Favorites Drawer -->
+  <div id="favorites-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">⭐</span>
+          <h3 class="text-base font-bold text-white">Your Saved Hooks</h3>
+        </div>
+        <button id="close-favorites-modal-btn" class="text-slate-400 hover:text-white text-lg p-1">
+          ✕
+        </button>
+      </div>
+
+      <!-- Favorites List Container -->
+      <div id="favorites-list" class="space-y-2.5 overflow-y-auto pr-1 flex-1 min-h-[140px]">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="pt-4 border-t border-slate-800 mt-4 flex items-center justify-between">
+        <button id="clear-all-favs-btn" class="text-xs text-rose-400 hover:text-rose-300 font-medium">
+          Clear All Saved
+        </button>
+        <button id="close-favs-bottom-btn" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-medium">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data: Standard + Pro Hooks
+    const freeHooks = [
+      // Business & Money
+      { text: "Stop wasting money on [topic]. Do this $0 alternative instead.", categoryTag: "Money Saver", niche: "business", isPro: false },
+      { text: "99% of people get [topic] completely wrong. Here is what actually makes money:", categoryTag: "Contrarian Take", niche: "business", isPro: false },
+      { text: "Steal my exact 3-step system that took me from zero to $10k in [topic]:", categoryTag: "Step-by-Step Blueprint", niche: "business", isPro: false },
+      { text: "3 brutal truths about [topic] that financial advisors will never tell you:", categoryTag: "Raw Truth", niche: "business", isPro: false },
+      { text: "How I built a passive income stream around [topic] in 60 days:", categoryTag: "Income Breakdown", niche: "business", isPro: false },
+
+      // Fitness & Health
+      { text: "I tried [topic] for 30 days straight, and here is what happened to my body:", categoryTag: "Real Experiment", niche: "fitness", isPro: false },
+      { text: "If you want to see actual progress in [topic] this month, stop doing this immediately:", categoryTag: "Progress Blocker", niche: "fitness", isPro: false },
+      { text: "The biggest lie the fitness industry told you about [topic]:", categoryTag: "Myth Buster", niche: "fitness", isPro: false },
+      { text: "How to fix your [topic] in 5 minutes a day without burning out:", categoryTag: "Quick Routine", niche: "fitness", isPro: false },
+      { text: "Stop overcomplicating [topic]. You literally only need these 2 exercises:", categoryTag: "Simplicity First", niche: "fitness", isPro: false },
+
+      // Tech & AI
+      { text: "Nobody is talking about this new tool for [topic], but it saves me 10 hours a week:", categoryTag: "Secret Tool", niche: "tech", isPro: false },
+      { text: "AI is completely transforming [topic]. If you don't adapt by 2027, you'll be left behind:", categoryTag: "Future Trend", niche: "tech", isPro: false },
+      { text: "The exact prompt framework I use to automate 80% of my [topic]:", categoryTag: "Prompt Masterclass", niche: "tech", isPro: false },
+      { text: "Top 3 free open-source tools for [topic] that are better than paid software:", categoryTag: "Free Software", niche: "tech", isPro: false },
+      { text: "How to learn [topic] from scratch without paying for a $2,000 bootcamp:", categoryTag: "Self-Taught Path", niche: "tech", isPro: false },
+
+      // Creator Life
+      { text: "If you're struggling to grow with [topic], you're probably making this 3-second mistake:", categoryTag: "Algorithm Fix", niche: "creator", isPro: false },
+      { text: "The exact 30-day posting strategy that got me my first 10,000 followers in [topic]:", categoryTag: "Growth Playbook", niche: "creator", isPro: false },
+      { text: "Why your [topic] videos are stuck under 200 views (and how to fix them today):", categoryTag: "View Jail Escape", niche: "creator", isPro: false },
+      { text: "Here is the exact framework I would use if I had to rebuild my audience in [topic] from scratch:", categoryTag: "Fresh Start", niche: "creator", isPro: false },
+      { text: "3 camera hacks for [topic] creators that make your phone look like a $3,000 rig:", categoryTag: "Production Hack", niche: "creator", isPro: false }
+    ];
+
+    const proHooks = [
+      { text: "The 1 mental model that makes mastering [topic] 10x faster than everyone else:", categoryTag: "High-Leverage Thinking", niche: "pro", isPro: true },
+      { text: "I audited 50 top creators in [topic]. Every single one secretly uses this formula:", categoryTag: "Deep Industry Audit", niche: "pro", isPro: true },
+      { text: "Why smart people constantly fail at [topic] while mediocre people win:", categoryTag: "Psychology Paradox", niche: "pro", isPro: true },
+      { text: "The exact script that generated $47,000 using only [topic] content:", categoryTag: "Conversion Script", niche: "pro", isPro: true },
+      { text: "If your [topic] content isn't converting viewers into customers, copy this hook:", categoryTag: "Sales Trigger", niche: "pro", isPro: true },
+      { text: "The $0 tech stack I use to produce 30 days of [topic] content in 4 hours flat:", categoryTag: "Production Stack", niche: "pro", isPro: true }
+    ];
+
+    // State Variables
+    let isProUser = false;
+    let savedFavorites = [];
+    let currentNiche = "all";
+    let activeHooks = [...freeHooks];
+    let currentHookIndex = 0;
+
+    // Load state safely from localStorage
+    try {
+      const savedPro = localStorage.getItem("hookdrop_pro");
+      if (savedPro === "true") {
+        isProUser = true;
+      }
+      const savedFavs = localStorage.getItem("hookdrop_favorites");
+      if (savedFavs) {
+        savedFavorites = JSON.parse(savedFavs);
+      }
+    } catch (e) {
+      console.log("Local storage not accessible", e);
+    }
+
+    // DOM Elements
+    const hookTextEl = document.getElementById("hook-text");
+    const hookCategoryEl = document.getElementById("hook-category");
+    const hookCounterEl = document.getElementById("hook-counter");
+    const hookProTagEl = document.getElementById("hook-pro-tag");
+    const topicInputEl = document.getElementById("topic-input");
+    const clearTopicBtn = document.getElementById("clear-topic-btn");
+    const generateBtn = document.getElementById("generate-btn");
+    const copyBtn = document.getElementById("copy-btn");
+    const copyTextEl = document.getElementById("copy-text");
+    const saveFavBtn = document.getElementById("save-fav-btn");
+    const favBtnTextEl = document.getElementById("fav-btn-text");
+    const favCountBadge = document.getElementById("fav-count-badge");
+    const categoryButtons = document.querySelectorAll(".category-pill");
+    const proVaultPill = document.getElementById("pro-vault-pill");
+
+    // Modal Elements
+    const proModal = document.getElementById("pro-modal");
+    const openProBtn = document.getElementById("open-pro-btn");
+    const closeProModalBtn = document.getElementById("close-pro-modal-btn");
+    const simulateBuyBtn = document.getElementById("simulate-buy-btn");
+    const proBadge = document.getElementById("pro-badge");
+    const proBtnText = document.getElementById("pro-btn-text");
+    const proTeaserBanner = document.getElementById("pro-teaser-banner");
+    const bannerUnlockBtn = document.getElementById("banner-unlock-btn");
+
+    const favoritesModal = document.getElementById("favorites-modal");
+    const openFavoritesBtn = document.getElementById("open-favorites-btn");
+    const closeFavoritesModalBtn = document.getElementById("close-favorites-modal-btn");
+    const closeFavsBottomBtn = document.getElementById("close-favs-bottom-btn");
+    const favoritesListEl = document.getElementById("favorites-list");
+    const clearAllFavsBtn = document.getElementById("clear-all-favs-btn");
+
+    // Refresh active hooks pool
+    function getMasterHookList() {
+      return isProUser ? [...freeHooks, ...proHooks] : [...freeHooks];
+    }
+
+    // Filter hooks based on category selection
+    function filterHooksByNiche(niche) {
+      currentNiche = niche;
+      const allAvailable = getMasterHookList();
+
+      if (niche === "pro") {
+        if (!isProUser) {
+          openProModal();
+          return;
+        }
+        activeHooks = allAvailable.filter(h => h.isPro);
+      } else if (niche === "all") {
+        activeHooks = [...allAvailable];
+      } else {
+        activeHooks = allAvailable.filter(h => h.niche === niche);
+      }
+
+      currentHookIndex = 0;
+      updateDisplay();
+    }
+
+    // Format text with user's custom topic
+    function formatHookText(rawTemplate) {
+      const customTopic = topicInputEl.value.trim();
+      if (!customTopic) {
+        return rawTemplate;
+      }
+      return rawTemplate.replace(/\[.*?\]/g, customTopic);
+    }
+
+    // Check if current hook is favorited
+    function isCurrentHookFavorited() {
+      if (activeHooks.length === 0) return false;
+      const current = activeHooks[currentHookIndex];
+      const currentFormatted = formatHookText(current.text);
+      return savedFavorites.some(f => f.text === currentFormatted);
+    }
+
+    // Update screen display
+    function updateDisplay() {
+      if (activeHooks.length === 0) return;
+      
+      const current = activeHooks[currentHookIndex];
+      const formatted = formatHookText(current.text);
+      
+      hookTextEl.textContent = `"${formatted}"`;
+      hookCategoryEl.textContent = current.categoryTag;
+      hookCounterEl.textContent = `${currentHookIndex + 1} of ${activeHooks.length}`;
+
+      if (current.isPro) {
+        hookProTagEl.classList.remove("hidden");
+      } else {
+        hookProTagEl.classList.add("hidden");
+      }
+
+      // Update favorite button state
+      if (isCurrentHookFavorited()) {
+        favBtnTextEl.textContent = "Favorited ⭐";
+        saveFavBtn.classList.add("text-amber-300", "border-amber-500/50");
+      } else {
+        favBtnTextEl.textContent = "Save to Favorites";
+        saveFavBtn.classList.remove("text-amber-300", "border-amber-500/50");
+      }
+
+      favCountBadge.textContent = savedFavorites.length;
+    }
+
+    // Pick next hook
+    function showNextHook() {
+      if (activeHooks.length <= 1) {
+        updateDisplay();
+        return;
+      }
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * activeHooks.length);
+      } while (nextIndex === currentHookIndex && activeHooks.length > 1);
+
+      currentHookIndex = nextIndex;
+      updateDisplay();
+    }
+
+    // Copy hook
+    function copyHook() {
+      const textToCopy = hookTextEl.textContent.replace(/^"|"$/g, '');
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(showCopiedState).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+
+      function fallbackCopy() {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = textToCopy;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+          showCopiedState();
+        } catch (err) {
+          copyTextEl.textContent = "Failed to copy";
+          setTimeout(() => { copyTextEl.textContent = "Copy to Clipboard"; }, 2000);
+        }
+      }
+
+      function showCopiedState() {
+        copyTextEl.textContent = "✓ Copied to Clipboard!";
+        copyBtn.classList.add("text-emerald-400", "border-emerald-500/50");
+        setTimeout(() => {
+          copyTextEl.textContent = "Copy to Clipboard";
+          copyBtn.classList.remove("text-emerald-400", "border-emerald-500/50");
+        }, 1800);
+      }
+    }
+
+    // Toggle Favorite
+    function toggleFavorite() {
+      const current = activeHooks[currentHookIndex];
+      const formatted = formatHookText(current.text);
+
+      const existingIndex = savedFavorites.findIndex(f => f.text === formatted);
+      if (existingIndex >= 0) {
+        savedFavorites.splice(existingIndex, 1);
+      } else {
+        savedFavorites.push({
+          id: Date.now(),
+          text: formatted,
+          category: current.categoryTag,
+          isPro: !!current.isPro
+        });
+      }
+
+      try {
+        localStorage.setItem("hookdrop_favorites", JSON.stringify(savedFavorites));
+      } catch (e) {}
+
+      updateDisplay();
+    }
+
+    // Render Favorites Drawer
+    function renderFavorites() {
+      favoritesListEl.innerHTML = "";
+      if (savedFavorites.length === 0) {
+        favoritesListEl.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-xs">
+            <p class="text-2xl mb-1">⭐</p>
+            No saved hooks yet. Click "Save to Favorites" while browsing to save hooks here.
+          </div>
+        `;
+        return;
+      }
+
+      savedFavorites.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-start justify-between gap-2";
+        row.innerHTML = `
+          <div class="flex-1">
+            <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-300">${item.category}</span>
+            <p class="text-xs text-slate-100 font-medium mt-1 leading-snug">"${item.text}"</p>
+          </div>
+          <div class="flex items-center gap-1 shrink-0 pt-0.5">
+            <button data-action="copy-fav" data-text="${encodeURIComponent(item.text)}" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs" title="Copy hook">
+              📋
+            </button>
+            <button data-action="delete-fav" data-id="${item.id}" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-300 text-xs" title="Remove">
+              ✕
+            </button>
+          </div>
+        `;
+        favoritesListEl.appendChild(row);
+      });
+
+      // Attach dynamic listeners for favorites actions
+      favoritesListEl.querySelectorAll('[data-action="copy-fav"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          const text = decodeURIComponent(btn.getAttribute("data-text"));
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+          }
+          btn.textContent = "✓";
+          setTimeout(() => { btn.textContent = "📋"; }, 1500);
+        });
+      });
+
+      favoritesListEl.querySelectorAll('[data-action="delete-fav"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-id"));
+          savedFavorites = savedFavorites.filter(f => f.id !== id);
+          try {
+            localStorage.setItem("hookdrop_favorites", JSON.stringify(savedFavorites));
+          } catch (e) {}
+          renderFavorites();
+          updateDisplay();
+        });
+      });
+    }
+
+    // Modal Control Functions
+    function openProModal() {
+      proModal.classList.remove("hidden");
+    }
+
+    function closeProModal() {
+      proModal.classList.add("hidden");
+    }
+
+    function openFavoritesModal() {
+      renderFavorites();
+      favoritesModal.classList.remove("hidden");
+    }
+
+    function closeFavoritesModal() {
+      favoritesModal.classList.add("hidden");
+    }
+
+    // Simulate Pro Purchase
+    function simulatePurchase() {
+      isProUser = true;
+      try {
+        localStorage.setItem("hookdrop_pro", "true");
+      } catch (e) {}
+
+      // Update UI for Pro status
+      proBadge.classList.remove("hidden");
+      proBtnText.textContent = "Pro Member";
+      openProBtn.classList.remove("from-amber-500", "to-amber-600");
+      openProBtn.classList.add("from-emerald-500", "to-emerald-600");
+      proVaultPill.innerHTML = `<span>✨</span><span>Pro Vault</span>`;
+      proTeaserBanner.classList.add("hidden");
+
+      closeProModal();
+      filterHooksByNiche(currentNiche);
+
+      // Toast feedback
+      copyTextEl.textContent = "🎉 Pro Vault Unlocked!";
+      copyBtn.classList.add("text-amber-300", "border-amber-500/50");
+      setTimeout(() => {
+        copyTextEl.textContent = "Copy to Clipboard";
+        copyBtn.classList.remove("text-amber-300", "border-amber-500/50");
+      }, 2500);
+    }
+
+    // Apply Pro styles if previously unlocked
+    if (isProUser) {
+      proBadge.classList.remove("hidden");
+      proBtnText.textContent = "Pro Member";
+      openProBtn.classList.remove("from-amber-500", "to-amber-600");
+      openProBtn.classList.add("from-emerald-500", "to-emerald-600");
+      proVaultPill.innerHTML = `<span>✨</span><span>Pro Vault</span>`;
+      proTeaserBanner.classList.add("hidden");
+    }
+
+    // Event Listeners: Category Pills
+    categoryButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetCategory = btn.getAttribute("data-category");
+        if (targetCategory === "pro" && !isProUser) {
+          openProModal();
+          return;
+        }
+        categoryButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        filterHooksByNiche(targetCategory);
+      });
+    });
+
+    // Topic Input Listeners
+    topicInputEl.addEventListener("input", () => {
+      if (topicInputEl.value.trim().length > 0) {
+        clearTopicBtn.classList.remove("hidden");
+      } else {
+        clearTopicBtn.classList.add("hidden");
+      }
+      updateDisplay();
+    });
+
+    clearTopicBtn.addEventListener("click", () => {
+      topicInputEl.value = "";
+      clearTopicBtn.classList.add("hidden");
+      updateDisplay();
+      topicInputEl.focus();
+    });
+
+    // Action Buttons
+    generateBtn.addEventListener("click", showNextHook);
+    copyBtn.addEventListener("click", copyHook);
+    saveFavBtn.addEventListener("click", toggleFavorite);
+
+    // Monetization & Pro Listeners
+    openProBtn.addEventListener("click", openProModal);
+    bannerUnlockBtn.addEventListener("click", openProModal);
+    closeProModalBtn.addEventListener("click", closeProModal);
+    simulateBuyBtn.addEventListener("click", simulatePurchase);
+
+    // Favorites Listeners
+    openFavoritesBtn.addEventListener("click", openFavoritesModal);
+    closeFavoritesModalBtn.addEventListener("click", closeFavoritesModal);
+    closeFavsBottomBtn.addEventListener("click", closeFavoritesModal);
+    clearAllFavsBtn.addEventListener("click", () => {
+      savedFavorites = [];
+      try {
+        localStorage.removeItem("hookdrop_favorites");
+      } catch (e) {}
+      renderFavorites();
+      updateDisplay();
+    });
+
+    // Initial render
+    filterHooksByNiche("all");
+  </script>
+</body>
+</html>
